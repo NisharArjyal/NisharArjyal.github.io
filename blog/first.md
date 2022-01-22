@@ -6,11 +6,14 @@
 
 What is it and how exactly do we do it?
 
+<!--
 ```julia:first
 a = [1,2,3]
 ```
 \show{first}
+-->
 
+<!--
 ~~~
 <script src="https://utteranc.es/client.js"
         repo="NisharArjyal/NisharArjyal.github.io"
@@ -20,5 +23,5 @@ a = [1,2,3]
         async>
 </script>
 ~~~
-
+-->
 
