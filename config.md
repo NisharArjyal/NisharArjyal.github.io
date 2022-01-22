@@ -18,6 +18,7 @@ website_descr = "Nishar Arjyal's Blog"
 website_url   = "https://NisharArjyal.github.io/"
 +++
 
+@def prepath = ""
 <!--
 Add here global latex commands to use throughout your pages.
 -->
