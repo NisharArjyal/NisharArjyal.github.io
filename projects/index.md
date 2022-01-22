@@ -4,7 +4,6 @@
 @def rss_title = "Blog"
 @def rss_pubdate = Date(2019, 5, 1)
 
-@def tags = ["julia", "code"]
 
 # Projects:  
 
