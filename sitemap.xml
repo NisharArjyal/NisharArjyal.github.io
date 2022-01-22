@@ -2,20 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://NisharArjyal.github.io/tags/index.html</loc>
-    <lastmod>2022-01-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://NisharArjyal.github.io/blog/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://NisharArjyal.github.io/projects/index.html</loc>
-    <lastmod>2022-01-22</lastmod>
+    <loc>https://NisharArjyal.github.io/404/index.html</loc>
+    <lastmod>2022-01-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -26,13 +20,19 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://NisharArjyal.github.io/404/index.html</loc>
+    <loc>https://NisharArjyal.github.io/blog/first/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://NisharArjyal.github.io/blog/first/index.html</loc>
+    <loc>https://NisharArjyal.github.io/tags/index.html</loc>
+    <lastmod>2022-01-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://NisharArjyal.github.io/projects/index.html</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
