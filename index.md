@@ -8,7 +8,7 @@
 ~~~
 <div class="row">
   <div class="container">
-    <img class="left" style="width:40%;" src=assets/yamisukehiro.png>
+    <img class="left" style="width:40%;" src=assets/me.jpg>
   </div>
 </div> 
 ~~~
