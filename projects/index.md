@@ -13,7 +13,7 @@
 \\
 * **GNODE**: (wip) A fast parallel graph library in Rust for efficient numerical computation supposed to form the base layer to build a Graph Deep Learning library on top with GPU based convolutions/stencil operations for GCN's.
 
-* Blocker: (wip) A simple blockchain application written in Python. This is more of a proof of concepts application.
+* **Blocker**: (wip) A simple blockchain application written in Python. This is more of a proof of concepts application.
 
 
 \toc

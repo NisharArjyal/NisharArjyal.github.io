@@ -1,4 +1,4 @@
-@ef title = "First Blog Post"
+@def title = "First Blog Post"
 @def published = "22 January 2022" 
 @def tags = ["code", "julia"]
 
