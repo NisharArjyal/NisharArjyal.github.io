@@ -27,8 +27,6 @@ jobs:
             using Franklin;
             optimize()'
     - name: Build and Deploy
-      env: 
-        GKSwsthype: '100'
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

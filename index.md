@@ -1,14 +1,17 @@
 @def title = "Nishar Arjyal"
 @def tags = ["intro"]
+@def hashtml = true
 
 ## Hello
 
 
-~~~<div class="row">
+~~~
+<div class="row">
   <div class="container">
-    <img class="left" style="width:40%;" src=assets/me.jpg>
+    <img class="left" style="width:40%;" src=assets/yamisukehiro.png>
   </div>
-</div>~~~
+</div> 
+~~~
 
 My name is Nishar Arjyal and I am currently a third year Computer Engineering student 
 at [Pulchowk Engineering Campus](https://pcampus.edu.np/), Kathmandu.
