@@ -17,7 +17,6 @@ Hello and welcome to my personal website. I am Nishar Arjyal and I am an ex Comp
 student from the [Pulchowk Engineering Campus](https://pcampus.edu.np/), Kathmandu.
 This is my blog and in this blog, we talk about computing, science,
 engineering, politics and basically everything there is in life.
-
 \\
 \\
 My interests are in all things science and scientific computing, particularly 
