@@ -1,1 +1,225 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/basic.css"> <link rel=icon  href="/assets/favicon.ico"> <title>First Blog Post</title> <header> <div class=blog-name ><a href="/">Nishar Arjyal</a></div> <nav> <ul> <li><a href="/">Home</a> <li><a href="/blog/">Blog</a> <li><a href="/projects/">Projects</a> <li><a href="/tags/">Tags</a> </ul> <img src="/assets/hamburger.svg" id=menu-icon > </nav> </header> <div class=franklin-content ><h2 id=non-linear_dynamical_systems ><a href="#non-linear_dynamical_systems" class=header-anchor >Non-Linear Dynamical Systems:</a></h2> <p>What is it and how exactly do we do it?</p> <div class=page-foot > <div class=copyright > &copy; Nishar Arjyal. Last modified: January 23, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia Programming Language</a>. </div> </div> </div>
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/basic.css"> <link rel=icon  href="/assets/favicon.ico"> <title> CUDA Programming</title> <header> <div class=blog-name ><a href="/">Nishar Arjyal</a></div> <nav> <ul> <li><a href="/">Home</a> <li><a href="/blog/">Blog</a> <li><a href="/projects/">Projects</a> <li><a href="/tags/">Tags</a> </ul> <img src="/assets/hamburger.svg" id=menu-icon > </nav> </header> <div class=franklin-content ><h1 id=on_gpu_programming ><a href="#on_gpu_programming" class=header-anchor >On GPU programming:</a></h1> <div class=franklin-toc ><ol><li><a href="#hello">Hello&#33;</a><li><a href="#setup">Setup </a><li><a href="#introduction">Introduction</a><li><a href="#emergence_of_cuda">Emergence of CUDA</a><li><a href="#cuda_programming_model">CUDA programming model: </a><li><a href="#cuda_threads_and_simt">CUDA threads and SIMT</a><li><a href="#cuda_workflow">CUDA workflow:</a><li><a href="#getting_started_writing_cuda_kernels">Getting Started writing CUDA Kernels</a><ol><li><a href="#writing_a_simple_vector_additon_routine_on_the_cpu">Writing a simple vector additon routine on the CPU.</a></ol><li><a href="#cuda_error_checking">CUDA Error Checking</a><li><a href="#scientific_computing_and_performance_metrics_of_the_gpu">Scientific computing and performance metrics of the GPU</a><li><a href="#from_c_to_julia">From C&#43;&#43; to Julia</a><li><a href="#a_simple_exercise_in_julia">A Simple Exercise In Julia</a><li><a href="#a_look_at_the_future">A look at the future: </a></ol></div> <h2 id=hello ><a href="#hello" class=header-anchor >Hello&#33;</a></h2> <p>Hello and welcome to my first blog ever. Today, and for the next couple of weeks, we are going to talk about GPU programming using CUDA C&#43;&#43;. <br/> <br/></p> <h2 id=setup ><a href="#setup" class=header-anchor >Setup </a></h2> <p>CUDA &#40;Compute Unified Device Architecture&#41; is a GPU programming platform developed by NVIDIA &#40;the GPU company you&#39;ve probably already heard of&#41;. To get to what CUDA is, how it came about, and how you can use it to make your programs run faster, we need to establish some other information. <br/> <br/></p> <h2 id=introduction ><a href="#introduction" class=header-anchor >Introduction</a></h2> <p>Early computers had only single processor we call the Central Processing Unit&#40;CPU&#41;. These CPUs from back then right up to now are relatively good at handling complicated control flow, sequential dependency, and high precision computations. However, the scientific computing world has an insatiable desire for performance. As we have figured out over the last couple of decades with the demise of Dennard Scaling and Moore&#39;s law &#40;the death of Moore&#39;s Law is somewhat of a controversial topic with many claiming that it is already dead, while several well known names in the computing world including Jim Keller and Peter Lee making <a href="https://youtu.be/oIG9ztQw2Gc">hilarious jokes</a>&#91;9:04&#93; about how it is not Moore&#39;s law that is dead, but rather that the number of people predicting the death of Moore&#39;s law doubled every year&#41;. Several computer architects from way back then had already identified that such scaling would not go on forever and so naturally computer architects &#40;literally in the 60s&#41; identified parallelism as the way to go forward. Although such disregard for the single processor approach was not met without skepticism with one of the more notable skeptics being Gene Amadahl, who noted in his 1967 paper &#40;which described what is now known as Amadahl&#39;s law&#41; that there is a limit to the performance increase one can obtain by making an algorithm parallel &#40;running it on parallel cores&#41;. This was because of the sequential dependence that naturally arises in virtually all computer programs. Ever since then, the world, particularly the scientific computing world has changed. We have shifted on to what we call today as heterogeneous computing systems which combines one or more CPUs with accelerator devices like GPUs and even more recently TPUs. GPUs by themselves are not new phenomenon. Their existence goes right back to the 60s. Traditional GPU pipelines consisted of programmable vertex processors that executed vertex shader programs and pixel fragment processors that executed pixel shader programs. GPUs back then were not really programmable for scientific computing meaning scientists either had to rely on domain experts of computer graphics or learn OpenGL and shaders themselves to get anything done. Now, anyone that has written a line of OpenGL code knows it is not fun to deal with. And this takes us back to CUDA.</p> <p>A typical CPU-GPU configuration may look like either of the following. <br/></p> <div class=im-50 ><img src="/assets/CPUGPU.png" alt="" /></div> <blockquote> <p>Fig: General Purpose Graphics Processor Architecture &#40;Aamodt et. al&#41;</p> </blockquote> <br/> <h2 id=emergence_of_cuda ><a href="#emergence_of_cuda" class=header-anchor >Emergence of CUDA</a></h2> <p>In their landmark whitepaper for the Tesla architecture NVIDIA introduced a unification of vertex and pixel shaders with their extension in what they called a Compute Unified Device Architecture &#40;CUDA&#41;. With this unification came a new modern parallel programming model. GPUs supporting this architecture could be programmed using the CUDA parallel programming model on top of the same old C programming language slightly extended.</p> <h2 id=cuda_programming_model ><a href="#cuda_programming_model" class=header-anchor >CUDA programming model: </a></h2> <p>The architecture of CUDA &#40;down below at the hardware level&#41; is SIMD. If you are writing a vertex shader program, you write it for one thread describing how it should process a vertex. Similarly, when you write a CUDA kernel, you describe the behavior of a single thread and the CUDA compiler and the runtime will handle the complicated balancing and synchronizing for you.The kernel is the code that you write on the CPU &#40;we call it the host device in almost all heterogeneous computing configurations&#41; but runs on the GPU &#40;we call it just the &#39;device&#39;&#41;. </p> <h2 id=cuda_threads_and_simt ><a href="#cuda_threads_and_simt" class=header-anchor >CUDA threads and SIMT</a></h2> <p>In CUDA, threads are grouped into blocks and blocks are themselves grouped onto a grid. A grid can be three dimensional, consisting of multiple blocks each of which can be three dimensional and contains threads along each dimension. All the threads of the same thread block are executed on the same Streaming Multiprocessor &#40;we are not going to get into the nifty details of the graphics architecture in this blog&#41;. Threads are a logical construct and the threads in a block can communicate because they share the same shared memory on a streaming multiprocessor. It is because of this separation of threads, blocks and grid that makes CUDA scalable to a multitude of different types of GPUs. <br/></p> <div class=im-50 ><img src="/assets/NVIDIATESLA.png" alt="" /></div> <blockquote> <p>Fig: from NVIDIA&#39;s original Tesla architecture whitepaper, featuring multiple SMs with their own SP&#39;s and so on.</p> </blockquote> <h2 id=cuda_workflow ><a href="#cuda_workflow" class=header-anchor >CUDA workflow:</a></h2> <p>A common workflow when using CUDA goes something like this: </p> <ol> <li><p>You initialize your data in the CPU &#40;host memory&#41; and then perform </p> </ol> <pre><code class=language-julia >cudaMemcpy</code></pre>
+<p>to send the data to the GPU.</p>
+<ol start=2 >
+<li><p>You call your GPU kernel with this GPU data </p>
+
+<li><p>You copy back the data &#40;processed&#41; from the GPU memory to CPU memory.</p>
+
+</ol>
+<p>We&#39;ve talked enough about the CUDA thread hierarchy, so I suppose we should  move on to memory hierarchy. <br/> The GPU consists of a shared memory space and a global memory space. Global memory is analogous to the CPU DRAM memory, while shared memory  is more similar to CPU cache. Unlike the CPU cache however, GPU shared memory can  be controlled by the user. In fact the same applies to GPU threads as well.  CPU threads can be a menace to synchronize, but CUDA threads  are far easier to handle and there are just more constructs for helping us  handle them.</p>
+<div class=im-50 ><img src="/assets/MEMORY.png" alt="" /></div>
+<blockquote>
+<p>Fig: dislaying memory hierarchy taken from Professional CUDA C Programming &#40;Cheng et al.&#41;.</p>
+</blockquote>
+<p>In a heterogeneous computing system, the CPU memory and GPU memory are  normally separated by a PCI-Express bus and so, this separation of memory  seems natural. However, CUDA also gives us a unification of these  two memory spaces, called Unified Memory so you don&#39;t need separate  pointers to CPU and GPU memory in your code.</p>
+<h2 id=getting_started_writing_cuda_kernels ><a href="#getting_started_writing_cuda_kernels" class=header-anchor >Getting Started writing CUDA Kernels</a></h2>
+<p>First you would want to have CUDA installed on your device if you have an NVIDIA graphics card. Go to unix shell and just do </p>
+<pre><code class=language-julia >which nvcc</code></pre>
+<p>If you get something like </p>
+<blockquote>
+<p>/usr/local/cuda-11.7/bin/nvcc</p>
+</blockquote>
+<p>then congrats, you have cuda installed in your computer and you&#39;re good to go.  To really use CUDA efficiently you need to master the thread hierarchy,  the memory hierarchy and the barrier synchronization capabilities  that the CUDA api provides. </p>
+<h3 id=writing_a_simple_vector_additon_routine_on_the_cpu ><a href="#writing_a_simple_vector_additon_routine_on_the_cpu" class=header-anchor >Writing a simple vector additon routine on the CPU.</a></h3>
+<pre><code class=language-cpp >void add_vecs_on_cpu&#40;float* C, float* A, float* B, size_t n&#41; &#123;
+    for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+        C&#91;i&#93; &#61; A&#91;i&#93; &#43; B&#91;i&#93;;
+    &#125;
+&#125;
+
+int main&#40;&#41; &#123;
+  int n &#61; 1024;
+  int nbytes &#61; N * sizeof&#40;float&#41;;
+  float* h_a &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  float* h_b &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  float* h_c &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  //set the arrays to some value.
+  for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+      h_a&#91;i&#93; &#61; 1.f;
+      h_b&#91;i&#93; &#61; 2.f;
+  &#125;
+  //add them on the cpu
+  add_vecs_on_cpu&#40;h_c, h_a, h_b, n&#41;;
+  //print them all
+  for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+      printf&#40;&quot;&#37;f\n&quot;, h_c&#91;i&#93;&#41;;
+  &#125;
+  printf&#40;&quot;printing on the cpu over\n&quot;&#41;;
+&#125;</code></pre>
+<p>This was easy, now let&#39;s write a CUDA kernel &#39;add&#95;vecs&#95;on&#95;gpu&#39;.</p>
+<pre><code class=language-cpp >__global__ void add_vecs_on_gpu&#40;float* C, float* A, float* B, size_t n&#41; &#123;
+    int ix &#61; blockIdx.x * blockDim.x &#43; threadIdx.x; 
+    if &#40;ix &lt; n&#41; &#123;
+        C&#91;ix&#93; &#61; A&#91;ix&#93; &#43; B&#91;ix&#93;;
+    &#125;
+&#125;
+
+int main&#40;&#41; &#123;
+  int tpb &#61; 256;//threads per block
+  int n &#61; 1024; //total no. of elements in the flat array
+  int nbytes &#61; N * sizeof&#40;float&#41;;
+  //pointers to device memory
+  float* d_a;
+  float* d_b;
+  float* d_c;
+  //arrays on the host
+  //allocate N * sizeof&#40;float&#41; elements 
+  float* h_a &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  float* h_b &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  float* h_c &#61; &#40;float*&#41;malloc&#40;nbytes&#41;;
+  //arrays on the device
+  //allocate n * sizeof&#40;float&#41; elements on the device
+  cudaMalloc&#40;&#40;float**&#41;&amp;d_a, nbytes&#41;;
+  cudaMalloc&#40;&#40;float**&#41;&amp;d_b, nbytes&#41;;
+  cudaMalloc&#40;&#40;float**&#41;&amp;d_c, nbytes&#41;;
+  //set the arrays to some value.
+  for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+      h_a&#91;i&#93; &#61; 1.f;
+      h_b&#91;i&#93; &#61; 2.f;
+  &#125;
+  cudaMemcpy&#40;d_a, h_a, nbytes, cudaMemcpyHostToDevice&#41;;
+  cudaMemcpy&#40;d_b, h_b, nbytes, cudaMemcpyHostToDevice&#41;;
+  add_vecs_on_cpu&#40;h_c, h_a, h_b, n&#41;;
+  //display
+  for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+      printf&#40;&quot;&#37;f\n&quot;, h_c&#91;i&#93;&#41;;
+  &#125;
+  printf&#40;&quot;printing on the cpu over\n&quot;&#41;;
+  //set h_c back to 0.0f to again do the computation on the gpu.
+  memset&#40;h_c, 0.0f, nbytes&#41;;
+  //dim3 &#61; 3 unsigned ints, this defines dimension across 
+  //x, y, and z, single value means only x 
+  dim3 blocks&#40;tpb&#41;; //no of threads in a block. 
+  dim3 grid &#40;&#40;n &#43; tpb - 1&#41;/tpb&#41;; //no of blocks in the grid
+  add_vecs_on_gpu&lt;&lt;&lt;grid, blocks&gt;&gt;&gt;&#40;d_c, d_a, d_b, n&#41;;
+  //copy the result back to host for displaying 
+  cudaMemcpy&#40;h_c, d_c, nbytes, cudaMemcpyDeviceToHost&#41;;
+  //print the result
+  for &#40;int i &#61; 0; i &lt; n; &#43;&#43;i&#41; &#123;
+      printf&#40;&quot;&#37;f\n&quot;, h_c&#91;i&#93;&#41;;
+  &#125;
+  //free all allocations
+  cudaFree&#40;d_a&#41;;
+  cudaFree&#40;d_b&#41;;
+  cudaFree&#40;d_c&#41;;
+  free&#40;h_a&#41;;
+  free&#40;h_b&#41;;
+  free&#40;h_c&#41;;
+&#125;</code></pre>
+<p>Here, <strong>global</strong> is a CUDA keyword and it indicates  that the kernel function will be called from the host  and run on the GPU.</p>
+<p>Now, due to physical limitations, a block can only have a certain number of threads.  In modern GPUs, the limit is something like 1024 threads  per block at a maximum. We prefer setting threads per block &#40;tpb&#41; to just 256 for now. After we only have a grid with blocks along a single dimension and blocks with threads along a single dimension for now.</p>
+<p>The line </p>
+<blockquote>
+<p>int ix &#61; blockIdx.x * blockDim.x &#43; threadIdx.x; </p>
+</blockquote>
+<p>really just tells each thread what indices of the array it  should work on. To find out the 3rd thread of the second block,  you need to go past the 1st block across all of its thread &#40;blockIdx.x * blockDim.x&#41; and add the thread id of that thread for that block&#40;blockIdx.x * blockDim.x &#43; threadIdx.x&#41;. When we call the kernel like this: </p>
+<blockquote>
+<p>add&#95;vecs&#95;on&#95;gpu&lt;&lt;&lt;grid, blocks&gt;&gt;&gt;&#40;...&#41;</p>
+</blockquote>
+<p>We specify the number of blocks in a grid and the number of threads in a block,  i.e. &#39;grid&#39; variable stores the number of blocks across its 3 dimensions &#40;if .y and .z are unspecified, they are defaulted to 1&#41; and &#39;blocks&#39; variable stores the  number of threads across its 3 dimensions.</p>
+<p>We pick a thread per block number of 256, and  use that to compute the number of blocks that we need in the line </p>
+<pre><code class=language-julia >dim3 blocks&#40;tpb&#41;; //no of threads in a block. 
+dim3 grid &#40;&#40;n &#43; tpb - 1&#41;/tpb&#41;; //no of blocks in the grid</code></pre>
+<p>The second line gives us the number of blocks we need.  instead of </p>
+<span class=katex-display ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML" display=block ><semantics><mrow><mfrac><mrow><mo stretchy=false >(</mo><mi>n</mi><mo>+</mo><mi>t</mi><mi>p</mi><mi>b</mi><mo>−</mo><mn>1</mn><mo stretchy=false >)</mo></mrow><mrow><mi>t</mi><mi>p</mi><mi>b</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\cfrac{(n+tpb-1)}{tpb}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:2.47044em;vertical-align:-0.8804400000000001em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.5899999999999999em;"><span style="top:-2.314em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord mathnormal">tp</span><span class="mord mathnormal">b</span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.74em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mopen >(</span><span class="mord mathnormal">n</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >+</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">tp</span><span class="mord mathnormal">b</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >−</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mord >1</span><span class=mclose >)</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.8804400000000001em;"><span></span></span></span></span></span><span></span></span></span></span></span></span>
+<p>we could also use ceil as in </p>
+<blockquote>
+<p>dim3 grid &#40;ceil&#40;n / tpb&#41;&#41;. </p>
+</blockquote>
+<p>This is to handle the case when the total number of  elements is not an integer multiple of  the number of threads per block.</p>
+<p>In the kernel code, we use the if statement  to ensure we are not indexing the arrays  at indices at which they are not even allocated because  if using ceil we are describing an extra block with some unused threads, we don&#39;t want those threads to be indexing into  the arrays.</p>
+<h2 id=cuda_error_checking ><a href="#cuda_error_checking" class=header-anchor >CUDA Error Checking</a></h2>
+<p>We think of two types of CUDA errors–synchronous errors and asynchronous errors.</p>
+<p><strong>Synchronous Errors</strong> : Synchronous error is something the  host thread knows before launching the kernel code, for example, if  the block, and grid dimension are illegal or invalid. It  is quite simple to handle such errors. </p>
+<p><strong>Asynchronous Errors</strong> : All kernel launches in CUDA are  asynchronous. This means that the moment you launch the host code  reaches the kernel code and no synchronous error is met,  the kernel threads are launched on the gpu and the control goes back to the host immediately while the gpu code  runs asynchronously. This means that we can&#39;t simply use  cuda runtime error handling functions in the host code because the error may occur during the runtime of the  GPU code a while later. A simple solution to this problem  would be to explicitly synchronize the kernel thread so that the handle of control goes back to host  code only after all gpu threads have finished executing.  For this, one would use &#39;cudaDeviceSynchronize&#39; and other synchronization  calls. Such explicit synchronization is not particularly good  for performance and is never tried in production level  code. So, for checking asynchronous errors,  use synchronization and runtime error capturing API calls  like cudaGetLastError and disable all synchronization in production code. A better explanation of error handling in CUDA is described in  Lei Mao&#39;s <a href="https://leimao.github.io/blog/Proper-CUDA-Error-Checking/">blog</a>. Lei is more of an expert on CUDA than I am &#40;well, I am literally just a beginner&#41;, so  you should really check him out. </p>
+<p>For error handling, we define the following macro: </p>
+<pre><code class=language-cpp >#define CHECK_CUDA_ERROR&#40;val&#41; check_cuda_error&#40;&#40;val&#41;, #val, __FILE__, __LINE__&#41;
+
+template &lt;typename T&gt;
+void check_cuda_error&#40;
+                T err,
+                const char* const func,
+                const char* const file,
+                const int line
+    &#41; 
+&#123;
+  if &#40;err &#33;&#61; cudaSuccess&#41; &#123;
+    fprintf&#40;stderr, &quot;cuda error in file: &#37;s at line: &#37;d\n&quot;, file, line&#41;;
+    fprintf&#40;stderr, &quot;Error message: &#37;s &#37;s\n&quot;, cudaGetErrorString&#40;err&#41;, func&#41;;
+  &#125;
+&#125;</code></pre>
+<p>Every time we call cudaMalloc or something, we will wrap it in CHECK&#95;CUDA&#95;ERROR macro from now on.</p>
+<p>At this point, you should be able to write your own matrix multiplication  kernel in CUDA C&#43;&#43;. It should be mentioned however that  you should pretty much never write your own matrix  multiplication kernel as part of production code because  heavily optimized libraries like cuBLAS exist for that already. One will only ever have to write GPU kernels for code that hasn&#39;t already been written and optimized  or for new research.</p>
+<h2 id=scientific_computing_and_performance_metrics_of_the_gpu ><a href="#scientific_computing_and_performance_metrics_of_the_gpu" class=header-anchor >Scientific computing and performance metrics of the GPU</a></h2>
+<p>Enough CUDA for now, let&#39;s get back to some of the challenges in scientific  computing with GPUs. <br/> Due to GPUs and massively parallel computing, performance of most scientific code today is not bounded by the speed of computations&#40; even though the GPUs are relatively slow at processing single data, they process a large number of data at the same time&#41;, but rather they are bounded by  memory access times. To measure this discrepancy in peak computational performance  for and memory bandwidth, we simply take their ratio and  multiply by the number of bytes of a number &#40;in 64 bit systems this is 8&#41;. The peak  computational performance is measured in GFlops/s while  memory bandwidth is measured in GB/s.</p>
+<h2 id=from_c_to_julia ><a href="#from_c_to_julia" class=header-anchor >From C&#43;&#43; to Julia</a></h2>
+<p>We had a look at what GPU programming  in C&#43;&#43; using CUDA looks like. Writing kernels  in C&#43;&#43; is hectic as you saw just from the above very simple example  of writing vector addition.</p>
+<p>This brings us to Julia which is a just-in-time compiled high level garbage collected programming language. We&#39;ll use CUDA.jl in julia for the next couple of examples and over the next couple of  blogs, all of our work will be in Julia.</p>
+<p>Now, there are some really good reasons as to why you should use Julia for  GPU programming for scientific work. One is that we don&#39;t have  to manually allocate and free host and device memory and copy the data with  complicated looking functions.  The CUDA.jl API for makes the entire workflow really smooth. </p>
+<p>The other reason being that despite such ease of use we really don&#39;t lose much on performance. It is well documented  that a reasonably optimized Julia code can match C&#43;&#43; or even Fortran level performnaces. Another big reason for Julia is the fact that we can write generic GPU kernels. </p>
+<p>In C&#43;&#43;, &#40;I&#39;m not writing this with any certainty, I am only just beginning to learn CUDA so educate me if I&#39;m wrong&#41;, you really can&#39;t write generic kernels because  the kernel code needs to be compiled with specific type at compile time  and so you need to manually template instantiate functions when calling them.  This means, you need to specify the types with which the function is called.  This is not really very dynamic is it? Well, Julia functions  are Just-In-Time compiled. That means, the called function is compiled at runtime with  the most specific permutation of types that are passed as arguments &#40;this is done by  method table lookup at runtime for all types in the argument list&#41;. This is called  multiple dispatch. Since at runtime julia knows the type with which the  function is being called, it can generate an optimized LLVM IR even for the CUDA kernel code.  This makes the process of writing CUDA kernels work for all the different types  and also writing code in a dynamic way more fun.</p>
+<h2 id=a_simple_exercise_in_julia ><a href="#a_simple_exercise_in_julia" class=header-anchor >A Simple Exercise In Julia</a></h2>
+<p>Let us write a cuda kernel that copies matrix A to matrix B  and we shall do some simple performance analysis of our code to  get you a feel of what GPU programming looks like in Julia.</p>
+<pre><code class=language-julia >using CUDA
+using BenchmarkTools
+
+const THREADS_PER_BLOCK &#61; 256
+# here, we won&#39;t bother checking sizes and so on
+function mycopy&#33;&#40;A, B&#41;
+    ix &#61; &#40;&#40;blockIdx&#40;&#41;.x-1&#41;*blockDim&#40;&#41;.x&#41; &#43; threadIdx&#40;&#41;.x
+    iy &#61; &#40;&#40;blockIdx&#40;&#41;.y-1&#41;*blockDim&#40;&#41;.y&#41; &#43; threadIdx&#40;&#41;.y
+    if ix &lt;&#61; size&#40;A&#41;&#91;1&#93; &amp;&amp; iy &lt;&#61; size&#40;B&#41;&#91;2&#93;
+        @inbounds A&#91;ix, iy&#93; &#61; B&#91;ix, iy&#93; #don&#39;t do bounds checking
+    end
+    return 
+end
+#set matrix size 1000 X 1000
+nx &#61; 1000
+ny &#61; 1000
+threads &#61; 10, 10, 1
+blocks &#61; ceil&#40;Int64, nx / threads&#91;1&#93;&#41;, ceil&#40;Int64, ny / threads&#91;2&#93;&#41;, 1
+A &#61; CUDA.fill&#40;1.0f0, nx, ny&#41;
+#print&#40;A&#41;
+B &#61; CUDA.fill&#40;0.0f0, nx, ny&#41;
+#print&#40;B&#41;
+@benchmark CUDA.@sync @cuda threads&#61;&#36;threads blocks&#61;&#36;blocks mycopy&#33;&#40;&#36;A, &#36;B&#41;
+#elapsedtime &#61; @belapsed CUDA.@sync @cuda threads&#61;&#36;threads blocks&#61;&#36;blocks mycopy&#33;&#40;&#36;A, &#36;B&#41;
+#CUDA.@sync @cuda threads&#61;threads blocks&#61;blocks mycopy&#33;&#40;A, B&#41;
+#print&#40;A&#41;</code></pre>
+<pre><code class="plaintext code-output">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
+ Range (min … max):  119.640 μs … 905.558 μs  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     121.335 μs               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   122.839 μs ±  20.750 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+
+   ▁▄▇█▇▆▅▆▆▆▇▇▅▄▃▂▂▁▁▁▁▁                                       ▂
+  ▇██████████████████████████▇▇▇▇▇▆▇▇▆▇▇▅▆▆▅▆▅▅▆▄▅▅▅▄▅▅▄▄▅▄▅▄▃▄ █
+  120 μs        Histogram: log(frequency) by time        133 μs <
+
+ Memory estimate: 256 bytes, allocs estimate: 3.</code></pre>
+<p>We are copying a 1000 by 1000 matrix within 150 microseconds. Let&#39;s do some back of the envelope computations. </p>
+<p>Suppose you have an &#39;nx&#39; by &#39;ny&#39; matrix and you want to copy it  to another &#39;nx&#39; by &#39;ny&#39; matrix. This requires nx * ny reads  and then nx*ny writes as in the line :</p>
+<blockquote>
+<p>A&#91;ix, iy&#93; &#61; B&#91;ix, iy&#93;</p>
+</blockquote>
+<p>What this line is doing is it is looking for all nx * ny elements of  array B in the global memory space of the GPU &#40;this is in global memory because we have done nothing to ensure  we are storing and accessing data in the shared memory of  respective SMs&#41; and writing all of those values to  A in the global memory which is again done for nx*ny times. So, we have a total of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>∗</mo><mi>n</mi><mi>x</mi><mo>∗</mo><mi>n</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">2 * nx * ny</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >2</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∗</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">x</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∗</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> memory accesses of <strong>Float32</strong> data. That would be a total of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle displaystyle=true  scriptlevel=0 ><mfrac><mrow><mn>2</mn><mo>∗</mo><mi>n</mi><mi>x</mi><mo>∗</mo><mi>n</mi><mi>y</mi><mo>∗</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy=false >(</mo><mi>F</mi><mi>l</mi><mi>o</mi><mi>a</mi><mi>t</mi><mn>32</mn><mo stretchy=false >)</mo></mrow><mrow><mn>1</mn><msup><mn>0</mn><mn>9</mn></msup></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\cfrac{2 * nx * ny * sizeof(Float32)}{10^{9}}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:2.276em;vertical-align:-0.686em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.5899999999999999em;"><span style="top:-2.314em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.74em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord >2</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∗</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">x</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∗</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∗</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class=mopen >(</span><span class="mord mathnormal" style="margin-right:0.01968em;">Fl</span><span class="mord mathnormal">o</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class=mord >32</span><span class=mclose >)</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.686em;"><span></span></span></span></span></span><span></span></span></span></span></span> GB  of data transferred. To compute the total memory throughput, we  divide by the minimum elapsed time of the taken time samples.  So, in the code, we need to use @belapsed instead of @benchmark macro. We got belapsed to be 0.000117577 in my computer.</p>
+<p>So, the memory throughput is : </p>
+<pre><code class=language-julia >elapsed_time &#61; 0.000117577 
+throughput &#61; 2 * 1000 * 1000 * sizeof&#40;Float32&#41; / &#40;10^9 * elapsedtime&#41;</code></pre>
+<pre><code class="plaintext code-output">68.04051812854554</code></pre>
+<h2 id=a_look_at_the_future ><a href="#a_look_at_the_future" class=header-anchor >A look at the future: </a></h2>
+<p>I guess this is it for today&#39;s blog. I just wanted to cover  all the simple basics of GPU programming. It&#39;s going to  take me a while to write another blog, however the next one is also going to be about the GPU  programming model with sample code in both C&#43;&#43; and Julia. Till then, stay tuned&#33;</p>
+<div class=page-foot >
+  <div class=copyright >
+    &copy; Nishar Arjyal. Last modified: August 27, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia Programming Language</a>.
+  </div>
+</div>
+</div>
+    
+        
+
+
+
+    
+    
+        <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>

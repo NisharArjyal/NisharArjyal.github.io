@@ -5,6 +5,8 @@
 * [code](/tag/code/)
 * [julia](/tag/julia/)
 * [intro](/tag/intro/)
+* [CUDA](/tag/CUDA/)
+* [Cpp](/tag/Cpp/)
 
 
 

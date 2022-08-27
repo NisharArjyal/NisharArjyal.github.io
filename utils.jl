@@ -59,7 +59,7 @@ Plug in the list of blog posts contained in the `/blog/` folder.
         else
             date    = Date(pubdate, dateformat"d U Y")
         end
-        write(io, """$date</i></span><a href="$url">$title</a>""")
+        write(io, """$date</i> </span><a href="$url">$title</a>""")
     end
     write(io, "</ul>")
     return String(take!(io))

@@ -11,9 +11,14 @@
 
 * [MathematicalToolkit](https://github.com/NisharArjyal/MathematicalToolkit): A forward-mode automatic differentiation tool that is based on operator overloading in C++ plus a fast tensor library for vector forward mode AD. 
 \\
-* **GNODE**: (wip) A fast parallel graph library in Rust for efficient numerical computation supposed to form the base layer to build a Graph Deep Learning library on top with GPU based convolutions/stencil operations for GCN's.
+* [Blocker](https://github.com/pramishp/blockchain_from_scratch): (wip) A simple blockchain application written in Python. This is more of a proof of concepts application.
+\\
+* Geocold: This is a vulkan based simple ray tracing engine written in the Rust programming language using the Vulkan api. For now, it is a work in progress.
+\\
+* DiffRay.jl: This project is a part of my 3rd year engineering project. It is a CUDA accelerated differentiable path tracer written in Julia.
+\\
+* DigitalSignalProcessing: This is a fast signal processing library written in raw C. It is threaded, SIMD accelerated and what not. 
 
-* [Blocker](https://github.com/NisharArjyal/Blocker): (wip) A simple blockchain application written in Python. This is more of a proof of concepts application.
 
 
 \toc

@@ -13,24 +13,32 @@
 </div> 
 ~~~
 
-My name is Nishar Arjyal and I am currently a third year Computer Engineering student 
-at [Pulchowk Engineering Campus](https://pcampus.edu.np/), Kathmandu.
-\\
-\\
-My interests are in Applied Mathematics, Machine Learning and its applications to Science and Engineering. 
-\\
-\\
-I generally program in Julia and Rust where I mostly build software that is related to fields
-like high performance computing, parallel SIMD vectorized coding, compilers, neural networks,
-numerical software, differential equations and what not. 
-\\
-\\
-Some of my skills include high performance programming in Julia, programming in C++, C, Python,
-Rust, and hopefully I can learn Haskell too in the future.
+Hello and welcome to my personal website. I am Nishar Arjyal and I am an ex Computer Engineering 
+student from the [Pulchowk Engineering Campus](https://pcampus.edu.np/), Kathmandu.
+This is my blog and in this blog, we talk about computing, science,
+engineering, politics and basically everything there is in life.
 
-I am familiar with the RISC-V instruction set and now I am checking out the x86 instruction set,
-alongside the LLVM-IR both of which are essential to understand for writing high performance 
-numerical code. 
+\\
+\\
+My interests are in all things science and scientific computing, particularly 
+with the booming field of scientific machine learning.
+\\
+\\
+My programming languages of interests are Rust, C++, C, Julia and Python.
+\\
+\\
+Some of my skills include GPU programming for computer graphics using 
+OpenGL and Vulkan APIs in C++ and Rust. I am also a longtime Julia programmer
+where I write most of my code. I am reasonably good at GPU 
+programming using CUDA C++ (or so I would like to think).
+\\
+\\
+Please do check out my blog up top and if you have any comments to leave, 
+you are invited [here](https://github.com/NisharArjyal/NisharArjyal.github.io/issues).
+
+
+
+
 
 
 

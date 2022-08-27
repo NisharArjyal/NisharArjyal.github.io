@@ -14,7 +14,7 @@ ignore = ["node_modules/", "franklin", "franklin.pub"]
 # RSS (the website_{title, descr, url} must be defined to get RSS)
 generate_rss = true
 website_title = "Nishar Arjyal's Blog"
-website_descr = "This is where I explain all things Science and Engineering."
+website_descr = "This is where I explain things that I am interested in."
 website_url   = "https://NisharArjyal.github.io/"
 +++
 
