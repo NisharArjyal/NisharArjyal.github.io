@@ -1,4 +1,4 @@
-Sitemap: https://NisharArjyal.github.io/sitemap.xml
+Sitemap: https://nishararjyal.github.io/sitemap.xml
 
 User-agent: *
 Disallow:
