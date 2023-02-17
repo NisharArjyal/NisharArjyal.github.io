@@ -44,13 +44,13 @@ header .blog-name {
   width: 35%;
   display: inline-block;
   text-align: left;
-  font-size: 18px;
+  font-size: 20px;
   font-family: "Lucida Console", Monaco, monospace;
   padding-top: 10px;
 }
 
 header .blog-name a {
-  color: #a6a2a0;
+  color: #000000;
   text-decoration: none;
 }
 

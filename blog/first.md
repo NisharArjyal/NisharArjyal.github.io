@@ -1,6 +1,6 @@
 @def title = " CUDA Programming"
 @def published = "22 January 2022" 
-@def tags = ["code", "julia", "CUDA", "Cpp"]
+@def tags = ["cuda", "cpp"]
 
 # On GPU programming:
 

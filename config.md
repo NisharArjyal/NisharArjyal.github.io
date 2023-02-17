@@ -15,7 +15,7 @@ ignore = ["node_modules/", "franklin", "franklin.pub"]
 generate_rss = true
 website_title = "Nishar Arjyal's Blog"
 website_descr = "This is where I explain things that I am interested in."
-website_url   = "https://NisharArjyal.github.io/"
+website_url   = "https://nishararjyal.github.io/"
 +++
 
 <!--
@@ -24,3 +24,9 @@ Add here global latex commands to use throughout your pages.
 
 \newcommand{\R}{\mathbb R}
 \newcommand{\scal}[1]{\langle #1 \rangle}
+\newcommand{\lineskip}{@@blank@@}
+\newcommand{\skipline}{\lineskip}
+\newcommand{\note}[1]{@@note @@title ⚠ Note@@ @@content #1 @@ @@}
+\newcommand{\warn}[1]{@@warning @@title ⚠ Warning!@@ @@content #1 @@ @@}
+\newcommand{\theorem}[1]{@@theorem @@title Theorem:@@ @@content #1 @@ @@}
+

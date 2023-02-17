@@ -2,11 +2,10 @@
 
 > The following are the tags that you will find in my blog.
 
-* [code](/tag/code/)
-* [julia](/tag/julia/)
-* [intro](/tag/intro/)
-* [CUDA](/tag/CUDA/)
-* [Cpp](/tag/Cpp/)
+* [cuda](/tag/cuda/)
+* [cpp](/tag/cpp/)
+* [math](/tag/math/)
+* [set_theory](/tag/set_theory/)
 
 
 
