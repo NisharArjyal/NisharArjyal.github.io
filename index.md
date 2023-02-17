@@ -2,7 +2,7 @@
 @def tags = ["intro"]
 @def hashtml = true
 
-## Hello
+# Hello
 
 
 ~~~
@@ -27,7 +27,8 @@ for writing code. Having a computer engineering background I am also very fond o
 Please do check out my blog up top and if you have any comments to leave, 
 you are invited [here](https://github.com/NisharArjyal/NisharArjyal.github.io/issues).
 \\
-## Contact Information: 
+
+# Contact Information: 
 
 You can contact me with ~~~<a href = "mailto: nishararjyal1@gmail.com">my email</a>~~~.
 You can find me on [Mastodon](https://elk.zone/fosstodon.org/@nishararjyal27), 

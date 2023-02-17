@@ -29,4 +29,9 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\note}[1]{@@note @@title ⚠ Note@@ @@content #1 @@ @@}
 \newcommand{\warn}[1]{@@warning @@title ⚠ Warning!@@ @@content #1 @@ @@}
 \newcommand{\theorem}[1]{@@theorem @@title Theorem:@@ @@content #1 @@ @@}
-
+\newcommand{\lemma}[1]{@@lemma @@title Lemma:@@ @@content #1 @@ @@}
+\newcommand{\axioms}[1]{@@axiom @@title Axioms:@@ @@content #1 @@ @@}
+\newcommand{\remark}[1]{@@remark @@title Remark:@@ @@content #1 @@ @@}
+\newcommand{\example}[1]{@@example @@title Example:@@ @@content #1 @@ @@}
+\newcommand{\proof}[1]{@@proof @@title Proof:@@ @@content #1 @@ @@}
+\newcommand{\definition}[1]{@@definition @@title Definition:@@ @@content #1 @@ @@}
