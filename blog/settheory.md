@@ -95,7 +95,7 @@ $$
 
 9. __Axiom of Regularity__:
 
-10. __Axiom of Choice__:
+10. \label{aoc} __Axiom of Choice__:
 
 }
 
@@ -106,7 +106,3 @@ The axioms $A-1 \text{ to } A-9$ are the $ZF$ axioms which becomes $ZFC$ with th
 * \biblabel{jech03}{Jech (2003)} **Thomas Jech**, [Set Theory](https://link.springer.com/book/10.1007/3-540-44761-X), Springer 2003.
 
 * \biblabel{enderton77}{Enderton (1977)} **Herbert B. Enderton**, [Elements of Set Theory](https://www.amazon.com/Elements-Set-Theory-Herbert-Enderton/dp/0122384407), Academic Press 1977.
-
-
-
-
