@@ -453,7 +453,7 @@ code {
   width: 95%;
   margin-left:auto;
   margin-right:auto;
-  background-color:  #f0f8ff;
+  background-color:  #ff8989;
   border-radius: 5px;
   margin-bottom: 1em;
 }
@@ -469,7 +469,7 @@ code {
   padding-left: 7px;
   padding-top: 2px;
   color: white;
-  background: #6486ed;
+  background: #00ff80;
 }
 
 .proof {

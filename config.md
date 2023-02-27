@@ -25,8 +25,12 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\R}{\mathbb R}
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
+\newcommand{\containedin}{\subseteq}
+\newcommand{\contains}{\supseteq}
 \newcommand{\rationals}{\mathbb Q}
 \newcommand{\powerset}{\mathscr{P}}
+\newcommand{\niceA}{\mathcal{A}}
+\newcommand{\niceF}{\mathcal{F}}
 
 \newcommand{\equivcls}[1]{%
   #1\!/\!{\sim}%
@@ -39,6 +43,7 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\warn}[1]{@@warning @@title ⚠ Warning!@@ @@content #1 @@ @@}
 \newcommand{\theorem}[1]{@@theorem @@title Theorem:@@ @@content #1 @@ @@}
 \newcommand{\lemma}[1]{@@lemma @@title Lemma:@@ @@content #1 @@ @@}
+\newcommand{\proposition}[1]{@@lemma @@title Proposition:@@ @@content #1 @@ @@}
 \newcommand{\remark}[1]{@@remark @@title Remark:@@ @@content #1 @@ @@}
 \newcommand{\axioms}[1]{@@axiom @@title Axioms:@@ @@content #1 @@ @@}
 \newcommand{\properties}[1]{@@axiom @@title Properties:@@ @@content #1 @@ @@}
